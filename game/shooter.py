@@ -63,19 +63,6 @@ class Shooter(pygame.sprite.Sprite):
         ):
             self.speed.y *= -1
 
-    def pbc(self) -> None:
-        if self.center.x + self.speed.x > self.surface.get_width() - self.radius:
-            self.center.x -= self.surface.get_width()
-
-        elif self.center.x + self.speed.x < 0 + self.radius:
-            self.center.x += self.surface.get_width()
-
-        if self.center.y + self.speed.y > self.surface.get_height() - self.radius:
-            self.center.y -= self.surface.get_height()
-
-        elif self.center.y + self.speed.y < 0 + self.radius:
-            self.center.y += self.surface.get_height()
-
     def move(self) -> None:
         self.bounce()
         self.center += self.speed
