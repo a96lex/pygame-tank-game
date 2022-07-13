@@ -10,15 +10,18 @@ from game.player import Player
 screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 pygame.display.init()
 pygame.display.set_caption("Tank game")
+pygame.font.init()
+font = pygame.font.Font("assets/pixeloid-font/PixeloidMono-1G8ae.ttf", 32)
 
 player = Player(screen)
 
 lvl = 0
-enemies = load_level(lvl, player)
-
 bullets = pygame.sprite.Group()
 particles = pygame.sprite.Group()
+enemies = pygame.sprite.Group()
 
+REST_BETWEEN_LEVELS = 50
+score = 0
 while True:
     pygame.time.delay(40)
 
@@ -57,24 +60,34 @@ while True:
             for enemy in enemies:
                 collided, direction = cirlce_collision(enemy, bullet)
                 if collided:
-                    enemy.take_damage(bullet.damage, direction)
+                    score += enemy.take_damage(bullet.damage, direction)
                     bullets.remove(bullet)
+                    break
         else:
             collided, direction = cirlce_collision(player, bullet)
             if collided:
-                player.take_damage(bullet.damage, direction)
+                score -= player.take_damage(bullet.damage, direction)
                 bullets.remove(bullet)
 
     for enemy in enemies:
         enemy.update()
-        if enemy.shooting_reload == 0:
+        if enemy.is_active() and enemy.shooting_reload == 0:
             enemy.shoot()
             bullets.add(Bullet(enemy))
 
     player.update()
 
     if not enemies:
+        enemies = load_level(lvl, player, REST_BETWEEN_LEVELS)
         lvl += 1
-        enemies = load_level(lvl, player)
+
+    screen.blit(
+        font.render(f"Current level: {lvl}", 5, Colors.UI),
+        (10, 5),
+    )
+    screen.blit(
+        font.render(f"Score: {score}", 5, Colors.UI),
+        (10, 37),
+    )
 
     pygame.display.update()
