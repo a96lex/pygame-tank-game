@@ -60,6 +60,9 @@ class Bullet(pygame.sprite.Sprite):
         self.direction.from_polar(
             (1, angle + (random() - 0.5) * shooter.BulletStats.precision)
         )
+        self.direction.normalize_ip()
+
+        self.center += self.direction * (shooter.radius + shooter.BulletStats.radius)
 
         if hasattr(shooter, "update_speed"):
             shooter.update_speed(self.direction, -shooter.BulletStats.recoil)
@@ -69,8 +72,21 @@ class Bullet(pygame.sprite.Sprite):
             self.surface, self.color, self.center, self.radius, SpriteWidth
         )
 
+    def bounce(self) -> None:
+        if (
+            self.center.x + self.speed > self.surface.get_width() - self.radius
+            or self.center.x + self.speed < 0 + self.radius
+        ):
+            self.direction.x *= -1
+        if (
+            self.center.y + self.speed > self.surface.get_height() - self.radius
+            or self.center.y + self.speed < 0 + self.radius
+        ):
+            self.direction.y *= -1
+
     def update(self) -> None:
         self.lifespan -= 1
+        self.bounce()
         self.center += self.speed * self.direction
         if self.random_movement:
             self.center.x += random() * self.speed
