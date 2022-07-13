@@ -20,12 +20,6 @@ class Enemy(Shooter):
     def is_active(self) -> bool:
         return self.idle_state == 0
 
-    def draw_idle(self) -> None:
-        pygame.draw.circle(self.surface, Colors.Player, self.center, self.radius)
-        pygame.draw.circle(
-            self.surface, Colors.Background, self.center, self.radius - SpriteWidth
-        )
-
     def rotate(self) -> None:
         vMouse = pygame.Vector2(self.target.center)
         vCenter = pygame.Vector2(self.center)
@@ -42,10 +36,9 @@ class Enemy(Shooter):
         if self.is_active():
             self.update_speed()
             self.move()
-            self.rotate()
-            self.draw()
-        else:
-            self.draw_idle()
+        
+        self.rotate()
+        self.draw()
 
 
 class Sniper(Enemy):
