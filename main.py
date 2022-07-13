@@ -70,7 +70,7 @@ while True:
                     break
 
         if not bullet.from_player or GameConfig.friendly_fire:
-            score += handle_collision_if_exist(bullet, player)
+            score -= handle_collision_if_exist(bullet, player)
 
     for enemy in enemies:
         enemy.update()
