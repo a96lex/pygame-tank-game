@@ -57,9 +57,9 @@ class Sniper(Enemy):
 
     class BulletStats:
         speed = 30
-        radius = 3
+        radius = 4
         lifespan = 100
-        precision = 5
+        precision = 6
         recoil = 3
         color = Colors.EnemyBullet
         random_movement = False
@@ -79,11 +79,11 @@ class Shotgun(Enemy):
     cooldown = 4
 
     class BulletStats:
-        speed = 20
+        speed = 14
         radius = 7
         lifespan = 100
-        precision = 30
-        recoil = 2
+        precision = 32
+        recoil = 3
         color = Colors.EnemyBullet
         random_movement = False
         damage = 30
