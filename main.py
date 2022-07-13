@@ -22,8 +22,8 @@ enemies = pygame.sprite.Group()
 
 
 class GameConfig:
-    friendly_fire = True
-    bouncy_bullets = True
+    friendly_fire = False
+    bouncy_bullets = False
 
 
 REST_BETWEEN_LEVELS = 50
