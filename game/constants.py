@@ -1,9 +1,10 @@
 class Colors:
-    Background = (255, 214, 255)
-    Player = (10, 30, 50)
-    PlayerBullet = (60, 10, 40)
-    EnemyBullet = (10, 40, 60)
-    HealthBar = (255, 255, 255)
+    Background = (166, 205, 255)
+    Player = (37, 43, 44)
+    UI = (255, 240, 240)
+    PlayerBullet = Player
+    EnemyBullet = Player
+    HealthBar = UI
 
 
 SpriteWidth = 2
