@@ -3,8 +3,10 @@ from typing import Tuple
 
 import pygame
 
-
 from .player import Player
+from .shooter import Shooter
+
+
 from .constants import SpriteWidth
 
 
@@ -25,15 +27,16 @@ class Bullet(pygame.sprite.Sprite):
     # Bullets can also spawn bullets (particles)
     class BulletStats:
         speed = 2
-        radius = 4
+        radius = 1.5
         lifespan = 40
         precision = 0
         recoil = 2
         cooldown = 0
         color = None
         random_movement = True
+        damage = 0
 
-    def __init__(self, shooter: Player) -> None:
+    def __init__(self, shooter: Shooter) -> None:
         pygame.sprite.Sprite.__init__(self)
         self.surface = shooter.surface
 
@@ -41,10 +44,13 @@ class Bullet(pygame.sprite.Sprite):
         self.speed = shooter.BulletStats.speed
         self.lifespan = shooter.BulletStats.lifespan
         self.radius = shooter.BulletStats.radius
+        self.damage = shooter.BulletStats.damage
 
         self.center = pygame.Vector2(shooter.center)
         self.direction = pygame.Vector2()
         self.random_movement = shooter.BulletStats.random_movement
+
+        self.from_player = isinstance(shooter, Player)
 
         if hasattr(shooter, "angle"):
             angle = shooter.angle
