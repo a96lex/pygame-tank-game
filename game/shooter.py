@@ -51,7 +51,33 @@ class Shooter(pygame.sprite.Sprite):
             ]
         )
 
+    def bounce(self) -> None:
+        if (
+            self.center.x + self.speed.x > self.surface.get_width() - self.radius
+            or self.center.x + self.speed.x < 0 + self.radius
+        ):
+            self.speed.x *= -1
+        if (
+            self.center.y + self.speed.y > self.surface.get_height() - self.radius
+            or self.center.y + self.speed.y < 0 + self.radius
+        ):
+            self.speed.y *= -1
+
+    def pbc(self) -> None:
+        if self.center.x + self.speed.x > self.surface.get_width() - self.radius:
+            self.center.x -= self.surface.get_width()
+
+        elif self.center.x + self.speed.x < 0 + self.radius:
+            self.center.x += self.surface.get_width()
+
+        if self.center.y + self.speed.y > self.surface.get_height() - self.radius:
+            self.center.y -= self.surface.get_height()
+
+        elif self.center.y + self.speed.y < 0 + self.radius:
+            self.center.y += self.surface.get_height()
+
     def move(self) -> None:
+        self.bounce()
         self.center += self.speed
         self.speed *= 0.9
 
@@ -109,12 +135,12 @@ class Shooter(pygame.sprite.Sprite):
     def shoot(self) -> None:
         self.shooting_reload = self.cooldown
 
-    def take_damage(self, dmg: float, direction: pygame.Vector2) -> None:
+    def take_damage(self, dmg: float, direction: pygame.Vector2) -> int:
         self.health -= dmg
         self.update_speed(direction, dmg / 1000)
         if self.health <= 0:
             self.kill()
-            return self.radius
+            return int(self.radius)
         return int(self.radius / 10)
 
     def update(self) -> None:
