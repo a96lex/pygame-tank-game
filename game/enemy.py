@@ -137,7 +137,7 @@ class ShotgunBoss(Enemy):
         [40, -25],
         [40, 25],
     ]
-    cooldown = 7
+    cooldown = 10
     max_health = 400
     health = max_health
 
@@ -145,7 +145,7 @@ class ShotgunBoss(Enemy):
         speed = 20
         radius = 15
         lifespan = 100
-        precision = 10
+        precision = 18
         recoil = 6
         color = Colors.EnemyBullet
         random_movement = False
