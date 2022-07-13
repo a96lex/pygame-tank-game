@@ -23,6 +23,7 @@ enemies = pygame.sprite.Group()
 
 class GameConfig:
     friendly_fire = True
+    bouncy_bullets = True
 
 
 REST_BETWEEN_LEVELS = 50
@@ -36,7 +37,7 @@ while True:
     if key[pygame.K_SPACE] or pygame.mouse.get_pressed()[0]:
         if player.shooting_reload == 0:
             player.shoot()
-            bullets.add(Bullet(player))
+            bullets.add(Bullet(player, GameConfig.bouncy_bullets))
     if key[pygame.K_UP] or key[pygame.K_w]:
         player.update_speed(pygame.Vector2(0, -1))
     if key[pygame.K_LEFT] or key[pygame.K_a]:
@@ -56,7 +57,7 @@ while True:
     for bullet in bullets:
         bullet.update()
         if bullet.lifespan == 0:
-            bullets.remove(bullet)
+            bullet.kill()
         else:
             if random() > 0.9:
                 particles.add(Bullet(bullet))
@@ -75,7 +76,7 @@ while True:
         enemy.update()
         if enemy.is_active() and enemy.shooting_reload == 0:
             enemy.shoot()
-            bullets.add(Bullet(enemy))
+            bullets.add(Bullet(enemy, GameConfig.bouncy_bullets))
 
     player.update()
 

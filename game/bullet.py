@@ -36,9 +36,10 @@ class Bullet(pygame.sprite.Sprite):
         random_movement = True
         damage = 0
 
-    def __init__(self, shooter: Shooter) -> None:
+    def __init__(self, shooter: Shooter, bouncy: bool = False) -> None:
         pygame.sprite.Sprite.__init__(self)
         self.surface = shooter.surface
+        self.bouncy = bouncy
 
         self.color = shooter.BulletStats.color or shooter.color
         self.speed = shooter.BulletStats.speed
@@ -86,7 +87,8 @@ class Bullet(pygame.sprite.Sprite):
 
     def update(self) -> None:
         self.lifespan -= 1
-        self.bounce()
+        if self.bouncy:
+            self.bounce()
         self.center += self.speed * self.direction
         if self.random_movement:
             self.center.x += random() * self.speed
