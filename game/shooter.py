@@ -111,7 +111,7 @@ class Shooter(pygame.sprite.Sprite):
 
     def take_damage(self, dmg: float, direction: pygame.Vector2) -> None:
         self.health -= dmg
-        self.update_speed(direction, 0.002)
+        self.update_speed(direction, dmg / 1000)
         if self.health <= 0:
             self.kill()
 
