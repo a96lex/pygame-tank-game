@@ -114,6 +114,8 @@ class Shooter(pygame.sprite.Sprite):
         self.update_speed(direction, dmg / 1000)
         if self.health <= 0:
             self.kill()
+            return self.radius
+        return int(self.radius / 10)
 
     def update(self) -> None:
         self.shooting_reload = max(0, self.shooting_reload - 1)
