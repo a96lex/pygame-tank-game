@@ -1,10 +1,11 @@
-import pygame
+from random import randint
 
+import pygame
 
 from .helpers import get_random_position_at_edge
 from .player import Player
 from .shooter import Shooter
-from .constants import Colors, SpriteWidth
+from .constants import Colors
 
 
 class Enemy(Shooter):
@@ -12,6 +13,7 @@ class Enemy(Shooter):
 
     def __init__(self, player: Player, idle_state: int) -> None:
         pygame.sprite.Sprite.__init__(self)
+        self.shooting_reload += idle_state + randint(0, 10)
         self.surface = player.surface
         self.target = player
         self.idle_state = idle_state
@@ -36,7 +38,7 @@ class Enemy(Shooter):
         if self.is_active():
             self.update_speed()
             self.move()
-        
+
         self.rotate()
         self.draw()
 
