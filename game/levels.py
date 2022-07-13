@@ -35,15 +35,15 @@ def generate_level(lvl_no: int) -> Level:
     return Level(snipers, shotguns, bombers, shotgun_bosses)
 
 
-def load_level(lvl_no: int, player: Player) -> pygame.sprite.Group:
+def load_level(lvl_no: int, player: Player, idle_state: int) -> pygame.sprite.Group:
     enemies = pygame.sprite.Group()
     level = generate_level(lvl_no)
     for _ in range(level.shotguns):
-        enemies.add(Shotgun(player))
+        enemies.add(Shotgun(player, idle_state))
     for _ in range(level.snipers):
-        enemies.add(Sniper(player))
+        enemies.add(Sniper(player, idle_state))
     for _ in range(level.bombers):
-        enemies.add(Bomber(player))
+        enemies.add(Bomber(player, idle_state))
     for _ in range(level.shotgun_bosses):
-        enemies.add(ShotgunBoss(player))
+        enemies.add(ShotgunBoss(player, idle_state))
     return enemies
