@@ -1,6 +1,15 @@
 from .shooter import Shooter
 from .constants import Colors
 
+"""
+max_speed
+max_health
+speed
+precision
+cooldown
+damage
+"""
+
 
 class Player(Shooter):
     radius = 30
@@ -27,9 +36,3 @@ class Player(Shooter):
         color = Colors.PlayerBullet
         random_movement = False
         damage = 40
-
-    def update(self) -> None:
-        self.shooting_reload = max(0, self.shooting_reload - 1)
-        self.move()
-        self.rotate()
-        self.draw()
