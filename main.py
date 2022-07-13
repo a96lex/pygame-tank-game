@@ -3,7 +3,7 @@ import pygame
 
 from game.bullet import Bullet
 from game.constants import Colors
-from game.helpers import check_quit_condition, cirlce_collision
+from game.helpers import check_quit_condition, handle_collision_if_exist
 from game.levels import load_level
 from game.player import Player
 
@@ -19,6 +19,11 @@ lvl = 0
 bullets = pygame.sprite.Group()
 particles = pygame.sprite.Group()
 enemies = pygame.sprite.Group()
+
+
+class GameConfig:
+    friendly_fire = True
+
 
 REST_BETWEEN_LEVELS = 50
 score = 0
@@ -56,18 +61,15 @@ while True:
             if random() > 0.9:
                 particles.add(Bullet(bullet))
 
-        if bullet.from_player:
+        if bullet.from_player or GameConfig.friendly_fire:
             for enemy in enemies:
-                collided, direction = cirlce_collision(enemy, bullet)
-                if collided:
-                    score += enemy.take_damage(bullet.damage, direction)
-                    bullets.remove(bullet)
+                hit_score = handle_collision_if_exist(bullet, enemy)
+                score += hit_score
+                if hit_score:
                     break
-        else:
-            collided, direction = cirlce_collision(player, bullet)
-            if collided:
-                score -= player.take_damage(bullet.damage, direction)
-                bullets.remove(bullet)
+
+        if not bullet.from_player or GameConfig.friendly_fire:
+            score += handle_collision_if_exist(bullet, player)
 
     for enemy in enemies:
         enemy.update()
