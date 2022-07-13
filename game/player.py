@@ -3,15 +3,15 @@ from .constants import Colors
 
 
 class Player(Shooter):
-    radius = 40
+    radius = 30
     acceleration = 3
     max_speed = 10
     angle = 0
     cannon_rect = [
-        [10, 20],
-        [10, -20],
-        [60, -20],
-        [60, 20],
+        [10, 18],
+        [10, -18],
+        [49, -18],
+        [49, 18],
     ]
     shooting_reload = 0
     max_health = 1000
@@ -21,7 +21,7 @@ class Player(Shooter):
         speed = 20
         radius = 10
         lifespan = 100
-        precision = 10
+        precision = 20
         recoil = 5
         cooldown = 20
         color = Colors.PlayerBullet
