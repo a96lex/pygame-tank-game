@@ -1,68 +1,30 @@
-from typing import List
-from random import randint
 import pygame
 
 
+from .helpers import get_random_position_at_edge
 from .player import Player
 from .shooter import Shooter
-from .constants import Colors
+from .constants import Colors, SpriteWidth
 
 
 class Enemy(Shooter):
-    surface: pygame.Surface = None
+    idle_state: int
 
-    cannon_coords: List[pygame.Vector2]
-    center: pygame.Vector2
-    radius = 20
-
-    acceleration = 1
-    speed = pygame.Vector2(0, 0)
-    max_speed = 5
-    angle = 0
-
-    cannon_rect = [
-        [5, 15],
-        [5, -15],
-        [40, -15],
-        [40, 15],
-    ]
-
-    shooting_reload = 0
-
-    class BulletStats:
-        speed = 20
-        radius = 6
-        lifespan = 100
-        precision = 30
-        recoil = 5
-        cooldown = 20
-        color = Colors.EnemyBullet
-        random_movement = False
-
-    def __init__(self, player: Player) -> None:
+    def __init__(self, player: Player, idle_state: int) -> None:
         pygame.sprite.Sprite.__init__(self)
         self.surface = player.surface
         self.target = player
-        width = self.surface.get_width()
-        height = self.surface.get_height()
-        p = randint(0, width + width + height + height)
-        center = pygame.Vector2()
-        if p < (width + height):
-            if p < width:
-                center.x = p
-                center.y = 0
-            else:
-                center.x = width
-                center.y = p - width
-        else:
-            p = p - (width + height)
-            if p < width:
-                center.x = width - p
-                center.y = height
-            else:
-                center.x = 0
-                center.y = height - (p - width)
-        self.center = center
+        self.idle_state = idle_state
+        self.center = get_random_position_at_edge(self.surface)
+
+    def is_active(self) -> bool:
+        return self.idle_state == 0
+
+    def draw_idle(self) -> None:
+        pygame.draw.circle(self.surface, Colors.Player, self.center, self.radius)
+        pygame.draw.circle(
+            self.surface, Colors.Background, self.center, self.radius - SpriteWidth
+        )
 
     def rotate(self) -> None:
         vMouse = pygame.Vector2(self.target.center)
@@ -75,10 +37,15 @@ class Enemy(Shooter):
 
     def update(self) -> None:
         self.shooting_reload = max(0, self.shooting_reload - 1)
-        self.update_speed()
-        self.move()
-        self.rotate()
-        self.draw()
+        self.idle_state = max(0, self.idle_state - 1)
+
+        if self.is_active():
+            self.update_speed()
+            self.move()
+            self.rotate()
+            self.draw()
+        else:
+            self.draw_idle()
 
 
 class Sniper(Enemy):
@@ -138,7 +105,7 @@ class ShotgunBoss(Enemy):
         [40, 25],
     ]
     cooldown = 10
-    max_health = 400
+    max_health = 200
     health = max_health
 
     class BulletStats:
