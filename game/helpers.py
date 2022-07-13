@@ -18,6 +18,15 @@ def cirlce_collision(c1: Shooter | Bullet, c2: Shooter | Bullet) -> bool:
     return distanceV.magnitude() < c1.radius + c2.radius, distanceV
 
 
+def handle_collision_if_exist(bullet: Bullet, entity: Shooter) -> int:
+    collided, direction = cirlce_collision(entity, bullet)
+    if collided:
+        bullet.kill()
+        return entity.take_damage(bullet.damage, direction)
+    else:
+        return 0
+
+
 def get_random_position_at_edge(surface: pygame.Surface, padding=100) -> pygame.Vector2:
     width = surface.get_width() - padding
     height = surface.get_height() - padding
