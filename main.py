@@ -11,6 +11,7 @@ pygame.display.set_caption("Tank game")
 
 player = Player(screen)
 bullets = pygame.sprite.Group()
+particles = pygame.sprite.Group()
 
 while True:
     pygame.time.delay(40)
@@ -20,7 +21,7 @@ while True:
 
     if key[pygame.K_SPACE] or pygame.mouse.get_pressed()[0]:
         if player.shooting_reload == 0:
-            bullets.add(Bullet(screen, player))
+            bullets.add(Bullet(player))
             player.shooting_reload = player.BulletStats.cooldown
     if key[pygame.K_UP] or key[pygame.K_w]:
         player.update_speed(pygame.Vector2(0, -1))
@@ -33,10 +34,17 @@ while True:
 
     screen.fill(Colors.Background)
 
+    for particle in particles:
+        particle.update()
+        if particle.lifespan == 0:
+            particles.remove(particle)
+
     for bullet in bullets:
         bullet.update()
         if bullet.lifespan == 0:
             bullets.remove(bullet)
+        else:
+            particles.add([Bullet(bullet) for _ in range(2)])
 
     player.update()
 
