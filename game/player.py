@@ -2,7 +2,7 @@ from typing import List
 
 import pygame
 
-from .constants import Colors
+from .constants import Colors, SpriteWidth
 
 
 class Player(pygame.sprite.Sprite):
@@ -27,12 +27,14 @@ class Player(pygame.sprite.Sprite):
     shooting_reload = 0
 
     class BulletStats:
-        speed = 15
-        radius = 5
+        speed = 20
+        radius = 10
         lifespan = 100
         precision = 10
-        recoil = 2
-        cooldown = 10
+        recoil = 5
+        cooldown = 20
+        color = Colors.PlayerBullet
+        random_movement = False
 
     def __init__(self, surface: pygame.Surface) -> None:
         pygame.sprite.Sprite.__init__(self)
@@ -64,8 +66,14 @@ class Player(pygame.sprite.Sprite):
         self.cannon_coords = [(vCenter + p) for p in rotated_point]
 
     def draw(self) -> None:
+        pygame.draw.polygon(self.surface, Colors.Background, self.cannon_coords)
+        pygame.draw.polygon(
+            self.surface, Colors.Player, self.cannon_coords, SpriteWidth
+        )
         pygame.draw.circle(self.surface, Colors.Player, self.center, self.radius)
-        pygame.draw.polygon(self.surface, Colors.Player, self.cannon_coords)
+        pygame.draw.circle(
+            self.surface, Colors.Background, self.center, self.radius - SpriteWidth
+        )
 
     def update(self) -> None:
         self.shooting_reload = max(0, self.shooting_reload - 1)
