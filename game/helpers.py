@@ -1,4 +1,5 @@
 from random import randint
+from time import time
 
 import pygame
 
@@ -49,3 +50,24 @@ def get_random_position_at_edge(surface: pygame.Surface, padding=100) -> pygame.
             center.y = height - (p - width) + padding / 2
 
     return center
+
+
+class DelayedBoolean:
+    value = False
+    refresh = 0.5  # seconds
+    last_time = 0
+
+    def __init__(
+        self, value: bool = False, refresh: float = 0.5, last_time: float = 0
+    ) -> None:
+        self.value = value
+        self.refresh = refresh
+        self.last_time = last_time
+
+    def switch(self) -> None:
+        if time() >= self.last_time + self.refresh:
+            self.last_time = time()
+            self.value = not self.value
+
+    def __bool__(self) -> bool:
+        return self.value
