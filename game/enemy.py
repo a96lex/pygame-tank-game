@@ -31,17 +31,6 @@ class Enemy(Shooter):
 
         self.cannon_coords = [(vCenter + p) for p in rotated_point]
 
-    def update(self) -> None:
-        self.shooting_reload = max(0, self.shooting_reload - 1)
-        self.idle_state = max(0, self.idle_state - 1)
-
-        if self.is_active():
-            self.update_speed()
-            self.move()
-
-        self.rotate()
-        self.draw()
-
 
 class Sniper(Enemy):
     radius = 15
