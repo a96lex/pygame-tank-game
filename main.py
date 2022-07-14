@@ -1,7 +1,7 @@
 from random import random
 import pygame
 
-from game.bullet import Bullet
+from game.bullet import Bullet, Explosion
 from game.constants import Colors
 from game.helpers import DelayedBoolean, check_quit_condition, handle_collision_if_exist
 from game.levels import load_level
@@ -19,6 +19,7 @@ lvl = 0
 bullets = pygame.sprite.Group()
 particles = pygame.sprite.Group()
 enemies = pygame.sprite.Group()
+explosions = pygame.sprite.Group()
 
 
 class GameConfig:
@@ -74,15 +75,24 @@ while True:
             if random() > 0.9:
                 particles.add(Bullet(bullet))
 
-        if bullet.from_player or GameConfig.friendly_fire:
-            for enemy in enemies:
-                hit_score = handle_collision_if_exist(bullet, enemy)
-                score += hit_score
-                if hit_score:
-                    break
+            if bullet.from_player or GameConfig.friendly_fire:
+                for enemy in enemies:
+                    hit_score = handle_collision_if_exist(bullet, enemy)
+                    if hit_score:
+                        explosions.add(Explosion(bullet))
+                        if enemy.health < 0:
+                            enemy.kill()
+                            explosions.add(Explosion(enemy))
+                        break
+                    else:
+                        score += hit_score
 
         if not bullet.from_player or GameConfig.friendly_fire:
-            score -= handle_collision_if_exist(bullet, player)
+            hit_score = handle_collision_if_exist(bullet, player)
+            if hit_score:
+                explosions.add(Explosion(bullet))
+            else:
+                score += hit_score
 
     for enemy in enemies:
         enemy.update()
@@ -91,6 +101,9 @@ while True:
             bullets.add(Bullet(enemy, GameConfig.bouncy_bullets))
 
     player.update()
+
+    for explosion in explosions:
+        explosion.update()
 
     if not enemies:
         enemies = load_level(lvl, player, REST_BETWEEN_LEVELS)
