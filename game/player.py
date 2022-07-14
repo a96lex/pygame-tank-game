@@ -25,6 +25,7 @@ class Player(Shooter):
     shooting_reload = 0
     max_health = 1000
     health = max_health
+    cooldown = 20
 
     class BulletStats:
         speed = 20
@@ -32,7 +33,6 @@ class Player(Shooter):
         lifespan = 100
         precision = 20
         recoil = 5
-        cooldown = 20
         color = Colors.PlayerBullet
         random_movement = False
         damage = 40
