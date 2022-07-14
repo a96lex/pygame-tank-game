@@ -122,8 +122,13 @@ class Shooter(pygame.sprite.Sprite):
     def shoot(self) -> None:
         self.shooting_reload = self.cooldown
 
+    def is_active(self) -> bool:
+        return True
+
     def take_damage(self, dmg: float, direction: pygame.Vector2) -> int:
-        self.health -= dmg
+        if self.is_active():
+            self.health -= dmg
+
         self.update_speed(direction, dmg / 1000)
         if self.health <= 0:
             self.kill()
@@ -132,6 +137,14 @@ class Shooter(pygame.sprite.Sprite):
 
     def update(self) -> None:
         self.shooting_reload = max(0, self.shooting_reload - 1)
+
+        if hasattr(self, "idle_state"):
+            # is an enemy
+            self.idle_state = max(0, self.idle_state - 1)
+
+            if self.is_active():
+                self.update_speed()
+
         self.move()
         self.rotate()
         self.draw()
