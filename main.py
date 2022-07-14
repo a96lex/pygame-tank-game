@@ -14,6 +14,7 @@ pygame.font.init()
 font = pygame.font.Font("assets/pixeloid-font/PixeloidMono-1G8ae.ttf", 32)
 
 player = Player(screen)
+player.load_stats()
 
 lvl = 0
 bullets = pygame.sprite.Group()
