@@ -57,7 +57,7 @@ class DelayedBoolean:
         self, value: bool = False, refresh: float = 0.5, last_time: float = 0
     ) -> None:
         self.value = value
-        self.refresh = refresh # seconds
+        self.refresh = refresh  # seconds
         self.last_time = last_time
 
     def switch(self) -> None:
