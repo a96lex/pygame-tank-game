@@ -3,7 +3,7 @@ import pygame
 
 from game.bullet import Bullet
 from game.constants import Colors
-from game.helpers import check_quit_condition, handle_collision_if_exist
+from game.helpers import DelayedBoolean, check_quit_condition, handle_collision_if_exist
 from game.levels import load_level
 from game.player import Player
 
@@ -28,13 +28,25 @@ class GameConfig:
 
 REST_BETWEEN_LEVELS = 50
 score = 0
+
+auto_fire = DelayedBoolean()
+paused = DelayedBoolean()
 while True:
     pygame.time.delay(40)
 
     check_quit_condition()
+
     key = pygame.key.get_pressed()
 
-    if key[pygame.K_SPACE] or pygame.mouse.get_pressed()[0]:
+    if key[pygame.K_p]:
+        paused.switch()
+    if key[pygame.K_e]:
+        auto_fire.switch()
+
+    if paused:
+        continue
+
+    if auto_fire or key[pygame.K_SPACE] or pygame.mouse.get_pressed()[0]:
         if player.shooting_reload == 0:
             player.shoot()
             bullets.add(Bullet(player, GameConfig.bouncy_bullets))
