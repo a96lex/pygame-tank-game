@@ -45,9 +45,10 @@ class Bullet(pygame.sprite.Sprite):
         else:
             angle = random() * 360
 
-        self.direction.from_polar(
-            (1, angle + (random() - 0.5) * shooter.BulletStats.precision)
-        )
+        # accuracy goes from 0 to 1000
+        max_deviation = 360 - shooter.BulletStats.precision * 3.6
+
+        self.direction.from_polar((1, angle + (random() - 0.5) * max_deviation))
         self.direction.normalize_ip()
 
         self.center += self.direction * (shooter.radius + shooter.BulletStats.radius)

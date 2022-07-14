@@ -48,7 +48,7 @@ class Sniper(Enemy):
         speed = 30
         radius = 4
         lifespan = 100
-        precision = 6
+        precision = 98
         recoil = 3
         color = Colors.EnemyBullet
         random_movement = False
@@ -71,7 +71,7 @@ class Shotgun(Enemy):
         speed = 14
         radius = 7
         lifespan = 100
-        precision = 32
+        precision = 91
         recoil = 3
         color = Colors.EnemyBullet
         random_movement = False
@@ -96,7 +96,7 @@ class ShotgunBoss(Enemy):
         speed = 20
         radius = 15
         lifespan = 100
-        precision = 18
+        precision = 95
         recoil = 6
         color = Colors.EnemyBullet
         random_movement = False
@@ -121,7 +121,7 @@ class Bomber(Enemy):
         speed = 15
         radius = 20
         lifespan = 100
-        precision = 10
+        precision = 97
         recoil = 80
         color = Colors.EnemyBullet
         random_movement = False
