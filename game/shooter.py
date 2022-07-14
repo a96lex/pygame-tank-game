@@ -30,6 +30,8 @@ class Shooter(pygame.sprite.Sprite):
     max_health = 100
     health = max_health
 
+    color = Colors.Player
+
     def __init__(self, surface: pygame.Surface) -> None:
         pygame.sprite.Sprite.__init__(self)
         self.surface = surface
@@ -131,7 +133,6 @@ class Shooter(pygame.sprite.Sprite):
 
         self.update_speed(direction, dmg / 1000)
         if self.health <= 0:
-            self.kill()
             return int(self.radius)
         return int(self.radius / 10)
 
