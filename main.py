@@ -80,18 +80,16 @@ while True:
                     hit_score = handle_collision_if_exist(bullet, enemy)
                     if hit_score:
                         explosions.add(Explosion(bullet))
-                        if enemy.health < 0:
+                        score += hit_score
+                        if enemy.health <= 0:
                             enemy.kill()
                             explosions.add(Explosion(enemy))
                         break
-                    else:
-                        score += hit_score
 
         if not bullet.from_player or GameConfig.friendly_fire:
             hit_score = handle_collision_if_exist(bullet, player)
             if hit_score:
                 explosions.add(Explosion(bullet))
-            else:
                 score += hit_score
 
     for enemy in enemies:
