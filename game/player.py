@@ -27,7 +27,7 @@ class Player(Shooter):
     health = max_health
     cooldown = 20
 
-    upgrades_path = "data/upgrades.dat"
+    upgrades_path = "data/upgrades.json"
     levels = {}
 
     class BulletStats:
@@ -78,4 +78,18 @@ class Player(Shooter):
         self.levels[stat] += 1
         self.upgrade_stat(stat)
         with open(self.upgrades_path, "w") as f:
-            json.dump(self.levels, f)
+            json.dump(self.levels, f, indent=2)
+
+    def can_update(self, stat) -> bool:
+        if hasattr(self, stat):
+            obj = self
+
+        if hasattr(self.BulletStats, stat):
+            obj = self.BulletStats
+
+        value = getattr(obj, stat)
+
+        upper_bound = UPGRADES[stat]["upper_bound"]
+        lower_bound = UPGRADES[stat]["lower_bound"]
+
+        return not (value == upper_bound or value == lower_bound)
