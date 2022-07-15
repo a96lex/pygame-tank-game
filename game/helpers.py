@@ -60,10 +60,34 @@ class DelayedBoolean:
         self.refresh = refresh  # seconds
         self.last_time = last_time
 
+    def can_update(self):
+        return time() >= self.last_time + self.refresh
+
     def switch(self) -> None:
-        if time() >= self.last_time + self.refresh:
+        if self.can_update():
             self.last_time = time()
             self.value = not self.value
 
     def __bool__(self) -> bool:
         return self.value
+
+    def force_update(self, value: bool) -> None:
+        self.value = value
+
+
+class DelayedValue:
+    def __init__(self, value, refresh: float = 0.1, last_time: float = 0) -> None:
+        self.value = value
+        self.refresh = refresh  # seconds
+        self.last_time = last_time
+
+    def can_update(self):
+        return time() >= self.last_time + self.refresh
+
+    def update(self, value) -> None:
+        if self.can_update():
+            self.last_time = time()
+            self.value = value
+
+    def force_update(self, value: bool) -> None:
+        self.value = value
