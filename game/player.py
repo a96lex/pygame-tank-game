@@ -1,31 +1,10 @@
 import json
 import os
 
+
 from .shooter import Shooter
 from .constants import Colors
-
-UPGRADES = {
-    "max_speed": {"multiplier": 1.1, "amount": 0, "upper_bound": 18, "lower_bound": 0},
-    "max_health": {
-        "multiplier": 1.1,
-        "amount": 0,
-        "upper_bound": 3000,
-        "lower_bound": 0,
-    },
-    "speed": {"multiplier": 1, "amount": 1, "upper_bound": 35, "lower_bound": 0},
-    "precision": {"multiplier": 1, "amount": 0.5, "upper_bound": 100, "lower_bound": 0},
-    "cooldown": {"multiplier": 1, "amount": -1, "upper_bound": 100, "lower_bound": 4},
-    "damage": {"multiplier": 1, "amount": 10, "upper_bound": 120, "lower_bound": 0},
-}
-
-DEFAULT_UPGRADE_LVLS = {
-    "max_speed": 0,
-    "max_health": 0,
-    "speed": 0,
-    "precision": 0,
-    "cooldown": 0,
-    "damage": 0,
-}
+from .upgrade_constants import DEFAULT_UPGRADE_LVLS, UPGRADES
 
 
 def clamp(value: float, upper_bound: float, lower_bound: float) -> float:
@@ -48,6 +27,9 @@ class Player(Shooter):
     health = max_health
     cooldown = 20
 
+    upgrades_path = "data/upgrades.dat"
+    levels = {}
+
     class BulletStats:
         speed = 20
         radius = 10
@@ -58,38 +40,42 @@ class Player(Shooter):
         random_movement = False
         damage = 40
 
-    def upgrade_stat(self, stat=str) -> None:
+    def upgrade_stat(self, stat: str) -> None:
         amount = UPGRADES[stat]["amount"]
         multiplier = UPGRADES[stat]["multiplier"]
         upper_bound = UPGRADES[stat]["upper_bound"]
         lower_bound = UPGRADES[stat]["lower_bound"]
 
-        el = None
+        obj = None
         if hasattr(self, stat):
-            el = self
+            obj = self
 
         if hasattr(self.BulletStats, stat):
-            el = self.BulletStats
+            obj = self.BulletStats
 
-        if el:
+        if obj:
             setattr(
-                el, stat, clamp(getattr(el, stat) + amount, upper_bound, lower_bound)
+                obj, stat, clamp(getattr(obj, stat) + amount, upper_bound, lower_bound)
             )
             setattr(
-                el,
+                obj,
                 stat,
-                clamp(getattr(el, stat) * multiplier, upper_bound, lower_bound),
+                clamp(getattr(obj, stat) * multiplier, upper_bound, lower_bound),
             )
 
     def load_stats(self) -> None:
-        path = "data/upgrades.dat"
-
-        if os.path.exists(path):
-            with open(path, "r") as f:
-                upgrade_data = json.load(f)
+        if os.path.exists(self.upgrades_path):
+            with open(self.upgrades_path, "r") as f:
+                self.levels = json.load(f)
         else:
-            upgrade_data = DEFAULT_UPGRADE_LVLS
+            self.levels = DEFAULT_UPGRADE_LVLS
 
-        for k, v in upgrade_data.items():
+        for k, v in self.levels.items():
             for _ in range(v):
                 self.upgrade_stat(k)
+
+    def increase_stat_level(self, stat: str) -> None:
+        self.levels[stat] += 1
+        self.upgrade_stat(stat)
+        with open(self.upgrades_path, "w") as f:
+            json.dump(self.levels, f)
