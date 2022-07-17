@@ -16,6 +16,7 @@ UPGRADES = {
     },
     UPGRADEABLE_STATS.MAX_HEALTH: {
         "multiplier": 1.1,
+        "affects": "health",
         "amount": 0,
         "upper_bound": 3000,
         "lower_bound": 0,

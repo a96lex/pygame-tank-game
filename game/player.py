@@ -4,7 +4,7 @@ import os
 
 from .shooter import Shooter
 from .constants import Colors
-from .upgrade_constants import DEFAULT_UPGRADE_LVLS, UPGRADES
+from .upgrade_constants import DEFAULT_UPGRADE_LVLS, UPGRADEABLE_STATS, UPGRADES
 
 
 def clamp(value: float, upper_bound: float, lower_bound: float) -> float:
@@ -45,6 +45,7 @@ class Player(Shooter):
         multiplier = UPGRADES[stat]["multiplier"]
         upper_bound = UPGRADES[stat]["upper_bound"]
         lower_bound = UPGRADES[stat]["lower_bound"]
+        affected_stat = UPGRADES[stat].get("affects")
 
         obj = None
         if hasattr(self, stat):
@@ -61,6 +62,13 @@ class Player(Shooter):
                 obj,
                 stat,
                 clamp(getattr(obj, stat) * multiplier, upper_bound, lower_bound),
+            )
+
+        if affected_stat:
+            setattr(
+                obj,
+                affected_stat,
+                clamp(getattr(obj, stat) + amount, upper_bound, lower_bound),
             )
 
     def load_stats(self) -> None:
