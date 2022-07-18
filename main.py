@@ -1,4 +1,5 @@
-from random import random
+import math
+from random import randint, random
 import pygame
 
 from game.bullet import Bullet, Explosion
@@ -11,9 +12,13 @@ from game.helpers import (
 )
 from game.levels import load_level
 from game.player import Player
+from game.screen_shake import ScreenShake
 from game.upgrade_constants import UPGRADEABLE_STATS
 
-screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+display = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+screen = display.copy()
+screen_shake = ScreenShake()
+
 pygame.display.init()
 pygame.display.set_caption("Tank game")
 pygame.font.init()
@@ -75,6 +80,7 @@ while True:
         if key[pygame.K_RIGHT] or key[pygame.K_d]:
             player.update_speed(pygame.Vector2(+1, 0))
 
+        display.fill(Colors.UI)
         screen.fill(Colors.Background)
 
         for particle in particles:
@@ -105,6 +111,7 @@ while True:
                 hit_score = handle_collision_if_exist(bullet, player)
                 if hit_score:
                     explosions.add(Explosion(bullet))
+                    screen_shake.shake(bullet)
                     score += hit_score
 
         for enemy in enemies:
@@ -142,6 +149,7 @@ while True:
             money.force_update(money.value + score)
 
     elif GameConfig.scene == Scenes.UPGRADES:
+        display.fill(Colors.UI)
         screen.fill(Colors.Background)
 
         stats = [v for k, v in UPGRADEABLE_STATS.__dict__.items() if k[0] != "_"]
@@ -203,4 +211,5 @@ while True:
                 (150, 600),
             )
 
+    display.blit(screen, screen_shake.get_screen_offset())
     pygame.display.update()
