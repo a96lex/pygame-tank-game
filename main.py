@@ -223,7 +223,7 @@ while True:
         for idx, stat in enumerate(stats):
             key_idx = idx + 49  # 49 is 1
             stat_lvl = player.levels[stat]
-            cost = int(stat_lvl**2)
+            cost = int((stat_lvl + 1) ** 2)
 
             if (
                 key[key_idx]
