@@ -1,9 +1,9 @@
-import math
-from random import randint, random
+from random import random
 import pygame
 
 from game.bullet import Bullet, Explosion
 from game.constants import Colors
+from game.game_data import GameConfig, Scenes
 from game.helpers import (
     DelayedBoolean,
     DelayedValue,
@@ -32,17 +32,6 @@ bullets = pygame.sprite.Group()
 particles = pygame.sprite.Group()
 enemies = pygame.sprite.Group()
 explosions = pygame.sprite.Group()
-
-
-class Scenes:
-    LEVEL = "level"
-    UPGRADES = "upgrades"
-
-
-class GameConfig:
-    friendly_fire = False
-    bouncy_bullets = False
-    scene = Scenes.LEVEL
 
 
 REST_BETWEEN_LEVELS = 50
@@ -146,6 +135,7 @@ while True:
             explosions.empty()
             paused.force_update(False)
             auto_fire.force_update(False)
+            screen_shake.stop()
             money.force_update(money.value + score)
 
     elif GameConfig.scene == Scenes.UPGRADES:
