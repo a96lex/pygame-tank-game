@@ -22,6 +22,7 @@ screen_shake = ScreenShake()
 pygame.display.init()
 pygame.display.set_caption("Tank game")
 pygame.font.init()
+small_font = pygame.font.Font("assets/pixeloid-font/PixeloidMono-1G8ae.ttf", 28)
 font = pygame.font.Font("assets/pixeloid-font/PixeloidMono-1G8ae.ttf", 32)
 title_font = pygame.font.Font("assets/pixeloid-font/PixeloidMono-1G8ae.ttf", 60)
 
@@ -39,7 +40,7 @@ explosions = pygame.sprite.Group()
 
 
 REST_BETWEEN_LEVELS = 50
-score = 0
+score = 10
 money = DelayedValue(game_stats.money)
 
 auto_fire = DelayedBoolean()
@@ -73,35 +74,35 @@ while True:
         screen.blit(text, text_rect)
 
         if score:
-            text = font.render(
+            text = small_font.render(
                 f"last score: {score}",
                 True,
                 Colors.UI,
             )
             text_rect = text.get_rect(
-                center=(screen.get_width() / 2, screen.get_height() / 25 * 10)
+                center=(screen.get_width() / 2, screen.get_height() / 24 * 15)
             )
             screen.blit(text, text_rect)
 
         text = font.render("Press x to start", True, Colors.UI)
         text_rect = text.get_rect(
-            center=(screen.get_width() / 2, screen.get_height() / 25 * 12)
+            center=(screen.get_width() / 2, screen.get_height() / 24 * 10)
         )
         screen.blit(text, text_rect)
 
         text = font.render("Press c to visit the shop", True, Colors.UI)
         text_rect = text.get_rect(
-            center=(screen.get_width() / 2, screen.get_height() / 25 * 13)
+            center=(screen.get_width() / 2, screen.get_height() / 24 * 11)
         )
         screen.blit(text, text_rect)
 
-        text = font.render(
+        text = small_font.render(
             f"High score: {game_stats.high_score} - Highest Level: {game_stats.highest_level} - Money: {game_stats.money}",
             True,
             Colors.UI,
         )
         text_rect = text.get_rect(
-            center=(screen.get_width() / 2, screen.get_height() / 25 * 16)
+            center=(screen.get_width() / 2, screen.get_height() / 24 * 16)
         )
         screen.blit(text, text_rect)
 
