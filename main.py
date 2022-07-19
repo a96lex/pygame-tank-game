@@ -238,7 +238,7 @@ while True:
             if player.can_update(stat):
                 screen.blit(
                     font.render(
-                        f"{stat}: {stat_lvl}. Cost: {cost}. Press {idx} to upgrade",
+                        f"{stat}: {stat_lvl}. Cost: {cost}. Press {idx+1} to upgrade",
                         True,
                         Colors.UI,
                     ),
