@@ -227,7 +227,7 @@ while True:
 
             if (
                 key[key_idx]
-                and cost < money.value
+                and cost <= money.value
                 and money.can_update()
                 and player.can_update(stat)
             ):
