@@ -235,21 +235,6 @@ while True:
                 game_stats.money = money.value
                 player.increase_stat_level(stat)
 
-            screen.blit(
-                font.render(f"High score: {game_stats.high_score}", True, Colors.UI),
-                (10, 37),
-            )
-            screen.blit(
-                font.render(
-                    f"Highest level: {game_stats.highest_level}", True, Colors.UI
-                ),
-                (10, 75),
-            )
-            screen.blit(
-                font.render(f"Money: {money.value}", True, Colors.UI),
-                (10, 117),
-            )
-
             if player.can_update(stat):
                 screen.blit(
                     font.render(
@@ -270,14 +255,27 @@ while True:
                     (150, 240 + 35 * idx),
                 )
 
-            screen.blit(
-                font.render(
-                    f"Press x to exit",
-                    True,
-                    Colors.UI,
-                ),
-                (150, 600),
-            )
+        screen.blit(
+            font.render(f"High score: {game_stats.high_score}", True, Colors.UI),
+            (10, 37),
+        )
+        screen.blit(
+            font.render(f"Highest level: {game_stats.highest_level}", True, Colors.UI),
+            (10, 75),
+        )
+        screen.blit(
+            font.render(f"Money: {money.value}", True, Colors.UI),
+            (10, 117),
+        )
+
+        screen.blit(
+            font.render(
+                f"Press x to exit",
+                True,
+                Colors.UI,
+            ),
+            (150, 600),
+        )
         screen.blit(
             font.render(
                 f"Press m to go to main menu",
