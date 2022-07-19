@@ -40,7 +40,7 @@ explosions = pygame.sprite.Group()
 
 REST_BETWEEN_LEVELS = 50
 score = 0
-money = DelayedValue(0)
+money = DelayedValue(game_stats.money)
 
 auto_fire = DelayedBoolean()
 paused = DelayedBoolean()
