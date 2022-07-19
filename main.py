@@ -122,11 +122,11 @@ while True:
             lvl += 1
 
         screen.blit(
-            font.render(f"Current level: {lvl}", 5, Colors.UI),
+            font.render(f"Current level: {lvl}", True, Colors.UI),
             (10, 5),
         )
         screen.blit(
-            font.render(f"Score: {score}", 5, Colors.UI),
+            font.render(f"Score: {score}", True, Colors.UI),
             (10, 37),
         )
 
@@ -178,15 +178,17 @@ while True:
                 player.increase_stat_level(stat)
 
             screen.blit(
-                font.render(f"High score: {game_stats.high_score}", 5, Colors.UI),
+                font.render(f"High score: {game_stats.high_score}", True, Colors.UI),
                 (10, 37),
             )
             screen.blit(
-                font.render(f"Highest level: {game_stats.highest_level}", 5, Colors.UI),
+                font.render(
+                    f"Highest level: {game_stats.highest_level}", True, Colors.UI
+                ),
                 (10, 75),
             )
             screen.blit(
-                font.render(f"Money: {money.value}", 5, Colors.UI),
+                font.render(f"Money: {money.value}", True, Colors.UI),
                 (10, 117),
             )
 
@@ -194,7 +196,7 @@ while True:
                 screen.blit(
                     font.render(
                         f"{stat}: {stat_lvl}. Cost: {cost}. Press {idx} to upgrade",
-                        5,
+                        True,
                         Colors.UI,
                     ),
                     (150, 240 + 35 * idx),
@@ -204,7 +206,7 @@ while True:
                 screen.blit(
                     font.render(
                         f"{stat}: {stat_lvl}. (Maximum level)",
-                        5,
+                        True,
                         Colors.UI,
                     ),
                     (150, 240 + 35 * idx),
@@ -213,7 +215,7 @@ while True:
             screen.blit(
                 font.render(
                     f"Press x to exit",
-                    5,
+                    True,
                     Colors.UI,
                 ),
                 (150, 600),
