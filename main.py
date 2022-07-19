@@ -209,14 +209,7 @@ while True:
 
         stats = [v for k, v in UPGRADEABLE_STATS.__dict__.items() if k[0] != "_"]
 
-        if key[pygame.K_x]:
-            del player
-            player = Player(screen)
-            player.load_stats()
-            GameConfig.scene = Scenes.LEVEL
-            score = 0
-            lvl = 0
-            continue
+
         if key[pygame.K_m]:
             GameConfig.scene = Scenes.MENU
             continue
@@ -269,14 +262,6 @@ while True:
             (10, 117),
         )
 
-        screen.blit(
-            font.render(
-                f"Press x to exit",
-                True,
-                Colors.UI,
-            ),
-            (150, 600),
-        )
         screen.blit(
             font.render(
                 f"Press m to go to main menu",
