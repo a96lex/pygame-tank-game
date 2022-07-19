@@ -209,7 +209,6 @@ while True:
 
         stats = [v for k, v in UPGRADEABLE_STATS.__dict__.items() if k[0] != "_"]
 
-
         if key[pygame.K_m]:
             GameConfig.scene = Scenes.MENU
             continue
