@@ -33,7 +33,6 @@ class GameStats:
 
         if self._loaded:
             stats = {k: v for k, v in self.__dict__.items() if k[0] != "_"}
-            print(f"writting {stats}")
 
             with open(self._stats_path, "w") as f:
                 json.dump(stats, f, indent=2)
