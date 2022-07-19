@@ -3,7 +3,7 @@ import pygame
 
 from game.bullet import Bullet, Explosion
 from game.constants import Colors
-from game.game_data import GameConfig, Scenes
+from game.game_data import GameConfig, GameStats, Scenes
 from game.helpers import (
     DelayedBoolean,
     DelayedValue,
@@ -26,6 +26,9 @@ font = pygame.font.Font("assets/pixeloid-font/PixeloidMono-1G8ae.ttf", 32)
 
 player = Player(screen)
 player.load_stats()
+
+game_stats = GameStats()
+game_stats.load_stats()
 
 lvl = 0
 bullets = pygame.sprite.Group()
@@ -140,6 +143,10 @@ while True:
             if score > 0:
                 money.force_update(money.value + score)
 
+            game_stats.money = money.value
+            game_stats.high_score = max(game_stats.high_score, score)
+            game_stats.highest_level = max(game_stats.highest_level, lvl)
+
     elif GameConfig.scene == Scenes.UPGRADES:
         display.fill(Colors.UI)
         screen.fill(Colors.Background)
@@ -167,11 +174,20 @@ while True:
                 and player.can_update(stat)
             ):
                 money.update(money.value - cost)
+                game_stats.money = money.value
                 player.increase_stat_level(stat)
 
             screen.blit(
-                font.render(f"Money: {money.value}", 5, Colors.UI),
+                font.render(f"High score: {game_stats.high_score}", 5, Colors.UI),
                 (10, 37),
+            )
+            screen.blit(
+                font.render(f"Highest level: {game_stats.highest_level}", 5, Colors.UI),
+                (10, 75),
+            )
+            screen.blit(
+                font.render(f"Money: {money.value}", 5, Colors.UI),
+                (10, 117),
             )
 
             if player.can_update(stat):
