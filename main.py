@@ -101,7 +101,7 @@ while True:
                 if hit_score:
                     explosions.add(Explosion(bullet))
                     screen_shake.shake(bullet)
-                    score += hit_score
+                    score -= hit_score
 
         for enemy in enemies:
             enemy.update()
@@ -136,7 +136,9 @@ while True:
             paused.force_update(False)
             auto_fire.force_update(False)
             screen_shake.stop()
-            money.force_update(money.value + score)
+
+            if score > 0:
+                money.force_update(money.value + score)
 
     elif GameConfig.scene == Scenes.UPGRADES:
         display.fill(Colors.UI)
