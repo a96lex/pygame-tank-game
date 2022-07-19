@@ -9,10 +9,12 @@ from game.helpers import (
     DelayedValue,
     check_quit_condition,
     handle_collision_if_exist,
+    sanitize_text,
 )
 from game.levels import load_level
 from game.player import Player
 from game.screen_shake import ScreenShake
+from game.text_renderer import render_text
 from game.upgrade_constants import UPGRADEABLE_STATS
 
 display = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
@@ -21,10 +23,6 @@ screen_shake = ScreenShake()
 
 pygame.display.init()
 pygame.display.set_caption("Tank game")
-pygame.font.init()
-small_font = pygame.font.Font("assets/pixeloid-font/PixeloidMono-1G8ae.ttf", 28)
-font = pygame.font.Font("assets/pixeloid-font/PixeloidMono-1G8ae.ttf", 32)
-title_font = pygame.font.Font("assets/pixeloid-font/PixeloidMono-1G8ae.ttf", 60)
 
 player = Player(screen)
 player.load_stats()
@@ -67,44 +65,25 @@ while True:
             continue
 
         screen.fill(Colors.Background)
-        text = title_font.render(f"Unnamed tank game", True, Colors.UI)
-        text_rect = text.get_rect(
-            center=(screen.get_width() / 2, screen.get_height() / 8)
+        render_text(screen, "Unnamed tank game", 2, 16, 3)
+        render_text(screen, "Press x to start", 1, 16, 9)
+        render_text(screen, "Press c to visit the shop", 1, 16, 10)
+        render_text(
+            screen,
+            f"High score: {game_stats.high_score} - Highest Level: {game_stats.highest_level} - Money: {game_stats.money}",
+            0,
+            16,
+            15,
         )
-        screen.blit(text, text_rect)
 
         if score:
-            text = small_font.render(
+            render_text(
+                screen,
                 f"last score: {score}",
-                True,
-                Colors.UI,
+                0,
+                16,
+                14,
             )
-            text_rect = text.get_rect(
-                center=(screen.get_width() / 2, screen.get_height() / 24 * 15)
-            )
-            screen.blit(text, text_rect)
-
-        text = font.render("Press x to start", True, Colors.UI)
-        text_rect = text.get_rect(
-            center=(screen.get_width() / 2, screen.get_height() / 24 * 10)
-        )
-        screen.blit(text, text_rect)
-
-        text = font.render("Press c to visit the shop", True, Colors.UI)
-        text_rect = text.get_rect(
-            center=(screen.get_width() / 2, screen.get_height() / 24 * 11)
-        )
-        screen.blit(text, text_rect)
-
-        text = small_font.render(
-            f"High score: {game_stats.high_score} - Highest Level: {game_stats.highest_level} - Money: {game_stats.money}",
-            True,
-            Colors.UI,
-        )
-        text_rect = text.get_rect(
-            center=(screen.get_width() / 2, screen.get_height() / 24 * 16)
-        )
-        screen.blit(text, text_rect)
 
     if GameConfig.scene == Scenes.LEVEL:
         if key[pygame.K_p]:
@@ -177,14 +156,8 @@ while True:
             enemies = load_level(lvl, player, REST_BETWEEN_LEVELS)
             lvl += 1
 
-        screen.blit(
-            font.render(f"Current level: {lvl}", True, Colors.UI),
-            (10, 5),
-        )
-        screen.blit(
-            font.render(f"Score: {score}", True, Colors.UI),
-            (10, 37),
-        )
+        render_text(screen, f"Current level: {lvl}", 1, 1, 1, "left")
+        render_text(screen, f"Score: {score}", 1, 1, 2, "left")
 
         if player.health <= 0:
             GameConfig.scene = Scenes.MENU
@@ -229,46 +202,17 @@ while True:
                 player.increase_stat_level(stat)
 
             if player.can_update(stat):
-                screen.blit(
-                    font.render(
-                        f"{stat}: {stat_lvl}. Cost: {cost}. Press {idx+1} to upgrade",
-                        True,
-                        Colors.UI,
-                    ),
-                    (150, 240 + 35 * idx),
-                )
-
+                upgrade_text = f"{sanitize_text(stat): <11}: {stat_lvl: <4}  Cost: {cost: <6}  Press {idx+1} to upgrade"
             else:
-                screen.blit(
-                    font.render(
-                        f"{stat}: {stat_lvl}. (Maximum level)",
-                        True,
-                        Colors.UI,
-                    ),
-                    (150, 240 + 35 * idx),
+                upgrade_text = (
+                    f"{sanitize_text(stat): <11}: {stat_lvl: <4}. (Maximum level)"
                 )
 
-        screen.blit(
-            font.render(f"High score: {game_stats.high_score}", True, Colors.UI),
-            (10, 37),
-        )
-        screen.blit(
-            font.render(f"Highest level: {game_stats.highest_level}", True, Colors.UI),
-            (10, 75),
-        )
-        screen.blit(
-            font.render(f"Money: {money.value}", True, Colors.UI),
-            (10, 117),
-        )
+            render_text(screen, upgrade_text, 1, 16, idx + 8)
 
-        screen.blit(
-            font.render(
-                f"Press m to go to main menu",
-                True,
-                Colors.UI,
-            ),
-            (150, 640),
-        )
+        render_text(screen, "Shop", 2, 16, 3)
+        render_text(screen, f"Money: {game_stats.money}", 1, 16, 5)
+        render_text(screen, "Press m to go to main menu", 1, 16, 17)
 
     display.blit(screen, screen_shake.get_screen_offset())
     pygame.display.update()

@@ -91,3 +91,9 @@ class DelayedValue:
 
     def force_update(self, value: bool) -> None:
         self.value = value
+
+
+def sanitize_text(text: str) -> str:
+    text = " ".join(text.split("_"))
+    text = text.title()
+    return text
