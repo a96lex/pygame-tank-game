@@ -40,10 +40,11 @@ class GameStats:
 
 class Scenes:
     LEVEL = "level"
-    UPGRADES = "upgrades"
+    SHOP = "shop"
+    MENU = "menu"
 
 
 class GameConfig:
     friendly_fire = False
     bouncy_bullets = False
-    scene = Scenes.LEVEL
+    scene = Scenes.MENU

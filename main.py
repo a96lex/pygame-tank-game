@@ -23,6 +23,7 @@ pygame.display.init()
 pygame.display.set_caption("Tank game")
 pygame.font.init()
 font = pygame.font.Font("assets/pixeloid-font/PixeloidMono-1G8ae.ttf", 32)
+title_font = pygame.font.Font("assets/pixeloid-font/PixeloidMono-1G8ae.ttf", 60)
 
 player = Player(screen)
 player.load_stats()
@@ -49,6 +50,60 @@ while True:
     check_quit_condition()
 
     key = pygame.key.get_pressed()
+
+    if GameConfig.scene == Scenes.MENU:
+        if key[pygame.K_x]:
+            if player:
+                del player
+            player = Player(screen)
+            player.load_stats()
+            GameConfig.scene = Scenes.LEVEL
+            score = 0
+            lvl = 0
+            continue
+        if key[pygame.K_c]:
+            GameConfig.scene = Scenes.SHOP
+            continue
+
+        screen.fill(Colors.Background)
+        text = title_font.render(f"Unnamed tank game", True, Colors.UI)
+        text_rect = text.get_rect(
+            center=(screen.get_width() / 2, screen.get_height() / 8)
+        )
+        screen.blit(text, text_rect)
+
+        if score:
+            text = font.render(
+                f"last score: {score}",
+                True,
+                Colors.UI,
+            )
+            text_rect = text.get_rect(
+                center=(screen.get_width() / 2, screen.get_height() / 25 * 10)
+            )
+            screen.blit(text, text_rect)
+
+        text = font.render("Press x to start", True, Colors.UI)
+        text_rect = text.get_rect(
+            center=(screen.get_width() / 2, screen.get_height() / 25 * 12)
+        )
+        screen.blit(text, text_rect)
+
+        text = font.render("Press c to visit the shop", True, Colors.UI)
+        text_rect = text.get_rect(
+            center=(screen.get_width() / 2, screen.get_height() / 25 * 13)
+        )
+        screen.blit(text, text_rect)
+
+        text = font.render(
+            f"High score: {game_stats.high_score} - Highest Level: {game_stats.highest_level} - Money: {game_stats.money}",
+            True,
+            Colors.UI,
+        )
+        text_rect = text.get_rect(
+            center=(screen.get_width() / 2, screen.get_height() / 25 * 16)
+        )
+        screen.blit(text, text_rect)
 
     if GameConfig.scene == Scenes.LEVEL:
         if key[pygame.K_p]:
@@ -131,7 +186,7 @@ while True:
         )
 
         if player.health <= 0:
-            GameConfig.scene = Scenes.UPGRADES
+            GameConfig.scene = Scenes.MENU
             bullets.empty()
             particles.empty()
             enemies.empty()
@@ -147,7 +202,7 @@ while True:
             game_stats.high_score = max(game_stats.high_score, score)
             game_stats.highest_level = max(game_stats.highest_level, lvl)
 
-    elif GameConfig.scene == Scenes.UPGRADES:
+    elif GameConfig.scene == Scenes.SHOP:
         display.fill(Colors.UI)
         screen.fill(Colors.Background)
 
@@ -160,6 +215,9 @@ while True:
             GameConfig.scene = Scenes.LEVEL
             score = 0
             lvl = 0
+            continue
+        if key[pygame.K_m]:
+            GameConfig.scene = Scenes.MENU
             continue
 
         for idx, stat in enumerate(stats):
@@ -220,6 +278,14 @@ while True:
                 ),
                 (150, 600),
             )
+        screen.blit(
+            font.render(
+                f"Press m to go to main menu",
+                True,
+                Colors.UI,
+            ),
+            (150, 640),
+        )
 
     display.blit(screen, screen_shake.get_screen_offset())
     pygame.display.update()
