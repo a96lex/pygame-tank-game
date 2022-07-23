@@ -18,11 +18,13 @@ from game.screen_shake import ScreenShake
 from game.text_renderer import render_text
 from game.upgrade_constants import UPGRADEABLE_STATS
 
+WIDTH, HEIGHT = 1280 * 0.7, 720 * 0.7
+
 
 async def main():
     pygame.init()
-    display = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-    screen = display.copy()
+    display = pygame.display.set_mode((WIDTH, HEIGHT))
+    screen = pygame.surface.Surface((WIDTH, HEIGHT))
     screen_shake = ScreenShake()
 
     pygame.display.init()
@@ -68,6 +70,7 @@ async def main():
                 GameConfig.scene = Scenes.SHOP
                 continue
 
+            display.fill(Colors.UI)
             screen.fill(Colors.Background)
             render_text(screen, "Unnamed tank game", 2, 16, 3)
             render_text(screen, "Press x to start", 1, 16, 9)
@@ -207,19 +210,28 @@ async def main():
                     player.increase_stat_level(stat)
 
                 if player.can_update(stat):
-                    upgrade_text = f"{sanitize_text(stat): <11}: {stat_lvl: <4}  Cost: {cost: <6}  Press {idx+1} to upgrade"
+                    upgrade_text = f"{sanitize_text(stat): <10}: {stat_lvl: <4}  Cost: {cost: <6} Press {idx+1} to upgrade"
                 else:
                     upgrade_text = (
-                        f"{sanitize_text(stat): <11}: {stat_lvl: <4}. (Maximum level)"
+                        f"{sanitize_text(stat): <10}: {stat_lvl: <4}. (Maximum level)"
                     )
 
-                render_text(screen, upgrade_text, 1, 16, idx + 8)
+                render_text(screen, upgrade_text, 0, 16, idx + 8)
 
             render_text(screen, "Shop", 2, 16, 3)
             render_text(screen, f"Money: {game_stats.money}", 1, 16, 5)
             render_text(screen, "Press m to go to main menu", 1, 16, 17)
 
-        display.blit(screen, screen_shake.get_screen_offset())
+        display.blit(
+            screen,
+            pygame.Vector2(
+                [
+                    (display.get_width() - WIDTH) / 2,
+                    (display.get_height() - HEIGHT) / 2,
+                ]
+            )
+            + screen_shake.get_screen_offset(),
+        )
         pygame.display.update()
         await asyncio.sleep(0)
 
