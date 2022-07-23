@@ -1,6 +1,7 @@
 import math
 from random import randint
-from typing import List
+
+from pygame import Vector2
 
 from .bullet import Bullet
 
@@ -16,10 +17,10 @@ class ScreenShake:
         self.shaking += int(math.sqrt(bullet.radius * 2))
         self.strength = int(math.sqrt(bullet.radius * 2))
 
-    def get_screen_offset(self) -> List[int]:
+    def get_screen_offset(self) -> Vector2:
         self.shaking = max(0, self.shaking - 1)
         return (
-            [randint(-self.strength, self.strength) for _ in range(2)]
+            Vector2([randint(-self.strength, self.strength) for _ in range(2)])
             if self.shaking > 0
-            else [0, 0]
+            else Vector2([0, 0])
         )
