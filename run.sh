@@ -1,1 +1,1 @@
-python -m pygbag --template template.html .
+python -m pygbag .

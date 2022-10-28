@@ -1,1 +1,1 @@
-python -m pygbag --template template.html --archive .
+python -m pygbag --archive .
