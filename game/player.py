@@ -74,7 +74,10 @@ class Player(Shooter):
     def load_stats(self) -> None:
         if os.path.exists(self.upgrades_path):
             with open(self.upgrades_path, "r") as f:
-                self.levels = json.load(f)
+                try:
+                    self.levels = json.load(f)
+                except json.decoder.JSONDecodeError:
+                    self.levels = DEFAULT_UPGRADE_LVLS
         else:
             self.levels = DEFAULT_UPGRADE_LVLS
 
