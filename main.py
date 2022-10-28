@@ -18,7 +18,7 @@ from game.screen_shake import ScreenShake
 from game.text_renderer import render_text
 from game.upgrade_constants import UPGRADEABLE_STATS
 
-WIDTH, HEIGHT = 1280 * 0.7, 720 * 0.7
+WIDTH, HEIGHT = 1280 * 0.8, 720 * 0.8
 
 
 async def main():
