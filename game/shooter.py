@@ -9,7 +9,7 @@ class Shooter(pygame.sprite.Sprite):
     surface: pygame.Surface = None
 
     cannon_coords: List[pygame.Vector2]
-    center: pygame.Vector2(0, 0)
+    center: pygame.Vector2 = pygame.Vector2(0, 0)
     radius = 40
 
     acceleration = 3
@@ -29,6 +29,7 @@ class Shooter(pygame.sprite.Sprite):
 
     max_health = 100
     health = max_health
+    regen = 0
 
     color = Colors.Player
 
@@ -124,6 +125,9 @@ class Shooter(pygame.sprite.Sprite):
     def shoot(self) -> None:
         self.shooting_reload = self.cooldown
 
+    def heal(self) -> None:
+        self.health = min(self.health + self.regen, self.max_health)
+
     def is_active(self) -> bool:
         return True
 
@@ -148,4 +152,5 @@ class Shooter(pygame.sprite.Sprite):
 
         self.move()
         self.rotate()
+        self.heal()
         self.draw()

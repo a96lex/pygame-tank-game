@@ -5,6 +5,7 @@ class UPGRADEABLE_STATS:
     PRECISION = "precision"
     COOLDOWN = "cooldown"
     DAMAGE = "damage"
+    REGEN = "regen"
 
 
 UPGRADES = {
@@ -45,6 +46,12 @@ UPGRADES = {
         "upper_bound": 120,
         "lower_bound": 0,
     },
+    UPGRADEABLE_STATS.REGEN: {
+        "multiplier": 1.1,
+        "amount": 0.1,
+        "upper_bound": 2,
+        "lower_bound": -1,
+    }
 }
 
 DEFAULT_UPGRADE_LVLS = {
@@ -54,4 +61,5 @@ DEFAULT_UPGRADE_LVLS = {
     "precision": 0,
     "cooldown": 0,
     "damage": 0,
+    "regen": 0
 }
