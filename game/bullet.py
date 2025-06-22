@@ -1,13 +1,10 @@
 from random import random
-from typing import Tuple
 
 import pygame
 
+from .constants import Colors, SpriteWidth
 from .player import Player
 from .shooter import Shooter
-
-
-from .constants import Colors, SpriteWidth
 
 
 class Bullet(pygame.sprite.Sprite):
@@ -40,10 +37,7 @@ class Bullet(pygame.sprite.Sprite):
 
         self.from_player = isinstance(shooter, Player)
 
-        if hasattr(shooter, "angle"):
-            angle = shooter.angle
-        else:
-            angle = random() * 360
+        angle = shooter.angle if hasattr(shooter, "angle") else random() * 360
 
         # accuracy goes from 0 to 1000
         max_deviation = 360 - shooter.BulletStats.precision * 3.6
@@ -57,9 +51,7 @@ class Bullet(pygame.sprite.Sprite):
             shooter.update_speed(self.direction, -shooter.BulletStats.recoil)
 
     def draw(self) -> None:
-        pygame.draw.circle(
-            self.surface, self.color, self.center, self.radius, SpriteWidth
-        )
+        pygame.draw.circle(self.surface, self.color, self.center, self.radius, SpriteWidth)
 
     def bounce(self) -> None:
         if (

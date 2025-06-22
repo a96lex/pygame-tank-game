@@ -15,8 +15,8 @@ def check_quit_condition() -> None:
 
 
 def cirlce_collision(c1: Shooter | Bullet, c2: Shooter | Bullet) -> bool:
-    distanceV = pygame.Vector2(c1.center - c2.center)
-    return distanceV.magnitude() < c1.radius + c2.radius, distanceV
+    distance_v = pygame.Vector2(c1.center - c2.center)
+    return distance_v.magnitude() < c1.radius + c2.radius, distance_v
 
 
 def handle_collision_if_exist(bullet: Bullet, entity: Shooter) -> int:
@@ -53,9 +53,7 @@ def get_random_position_at_edge(surface: pygame.Surface, padding=100) -> pygame.
 
 
 class DelayedBoolean:
-    def __init__(
-        self, value: bool = False, refresh: float = 0.5, last_time: float = 0
-    ) -> None:
+    def __init__(self, value: bool = False, refresh: float = 0.5, last_time: float = 0) -> None:
         self.value = value
         self.refresh = refresh  # seconds
         self.last_time = last_time

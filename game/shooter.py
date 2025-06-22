@@ -1,5 +1,3 @@
-from typing import List
-
 import pygame
 
 from .constants import Colors, SpriteWidth
@@ -8,7 +6,7 @@ from .constants import Colors, SpriteWidth
 class Shooter(pygame.sprite.Sprite):
     surface: pygame.Surface = None
 
-    cannon_coords: List[pygame.Vector2]
+    cannon_coords: list[pygame.Vector2]
     center: pygame.Vector2 = pygame.Vector2(0, 0)
     radius = 40
 
@@ -38,9 +36,7 @@ class Shooter(pygame.sprite.Sprite):
         self.surface = surface
         self.center = pygame.Vector2(surface.get_width() / 2, surface.get_height() / 2)
 
-    def update_speed(
-        self, direction: pygame.Vector2 = None, magnitude: float = None
-    ) -> None:
+    def update_speed(self, direction: pygame.Vector2 = None, magnitude: float = None) -> None:
         if not magnitude:
             magnitude = self.acceleration
 
@@ -72,22 +68,23 @@ class Shooter(pygame.sprite.Sprite):
         self.speed *= 0.9
 
     def rotate(self) -> None:
-        vMouse = pygame.Vector2(pygame.mouse.get_pos())
-        vCenter = pygame.Vector2(self.center)
-        self.angle = pygame.Vector2().angle_to(vMouse - vCenter)
+        v_mouse = pygame.Vector2(pygame.mouse.get_pos())
+        v_center = pygame.Vector2(self.center)
+        self.angle = pygame.Vector2().angle_to(v_mouse - v_center)
 
         rotated_point = [pygame.Vector2(p).rotate(self.angle) for p in self.cannon_rect]
 
-        self.cannon_coords = [(vCenter + p) for p in rotated_point]
+        self.cannon_coords = [(v_center + p) for p in rotated_point]
 
     def draw(self) -> None:
         pygame.draw.polygon(self.surface, Colors.Background, self.cannon_coords)
-        pygame.draw.polygon(
-            self.surface, Colors.Player, self.cannon_coords, SpriteWidth
-        )
+        pygame.draw.polygon(self.surface, Colors.Player, self.cannon_coords, SpriteWidth)
         pygame.draw.circle(self.surface, Colors.Player, self.center, self.radius)
         pygame.draw.circle(
-            self.surface, Colors.Background, self.center, self.radius - SpriteWidth
+            self.surface,
+            Colors.Background,
+            self.center,
+            self.radius - SpriteWidth,
         )
 
         if self.health < self.max_health:

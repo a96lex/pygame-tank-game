@@ -1,9 +1,10 @@
 import asyncio
 from random import random
+
 import pygame
 
 from game.bullet import Bullet, Explosion
-from game.constants import Colors
+from game.constants import REST_BETWEEN_LEVELS, Colors
 from game.game_data import GameConfig, GameStats, Scenes
 from game.helpers import (
     DelayedBoolean,
@@ -16,7 +17,7 @@ from game.levels import load_level
 from game.player import Player
 from game.screen_shake import ScreenShake
 from game.text_renderer import render_text
-from game.upgrade_constants import UPGRADEABLE_STATS
+from game.upgrade_constants import UpgradeableStats
 
 WIDTH, HEIGHT = 1280 * 0.8, 720 * 0.8
 
@@ -42,7 +43,6 @@ async def main():
     enemies = pygame.sprite.Group()
     explosions = pygame.sprite.Group()
 
-    REST_BETWEEN_LEVELS = 50
     score = 0
     money = DelayedValue(game_stats.money)
 
@@ -105,10 +105,11 @@ async def main():
             else:
                 display.fill(Colors.UI)
                 screen.fill(Colors.Background)
-                if auto_fire or key[pygame.K_SPACE] or pygame.mouse.get_pressed()[0]:
-                    if player.shooting_reload == 0:
-                        player.shoot()
-                        bullets.add(Bullet(player, GameConfig.bouncy_bullets))
+                if (
+                    auto_fire or key[pygame.K_SPACE] or pygame.mouse.get_pressed()[0]
+                ) and player.shooting_reload == 0:
+                    player.shoot()
+                    bullets.add(Bullet(player, GameConfig.bouncy_bullets))
                 if key[pygame.K_UP] or key[pygame.K_w]:
                     player.update_speed(pygame.Vector2(0, -1))
                 if key[pygame.K_LEFT] or key[pygame.K_a]:
@@ -188,7 +189,7 @@ async def main():
             display.fill(Colors.UI)
             screen.fill(Colors.Background)
 
-            stats = [v for k, v in UPGRADEABLE_STATS.__dict__.items() if k[0] != "_"]
+            stats = [v for k, v in UpgradeableStats.__dict__.items() if k[0] != "_"]
 
             if key[pygame.K_m]:
                 GameConfig.scene = Scenes.MENU
@@ -210,11 +211,9 @@ async def main():
                     player.increase_stat_level(stat)
 
                 if player.can_update(stat):
-                    upgrade_text = f"{sanitize_text(stat): <10}: {stat_lvl: <4}  Cost: {cost: <6} Press {idx+1} to upgrade"
+                    upgrade_text = f"{sanitize_text(stat): <10}: {stat_lvl: <4}  Cost: {cost: <6} Press {idx + 1} to upgrade"
                 else:
-                    upgrade_text = (
-                        f"{sanitize_text(stat): <10}: {stat_lvl: <4}. (Maximum level)"
-                    )
+                    upgrade_text = f"{sanitize_text(stat): <10}: {stat_lvl: <4}. (Maximum level)"
 
                 render_text(screen, upgrade_text, 0, 16, idx + 8)
 

@@ -1,10 +1,9 @@
 import json
 import os
 
-
-from .shooter import Shooter
 from .constants import Colors
-from .upgrade_constants import DEFAULT_UPGRADE_LVLS, UPGRADEABLE_STATS, UPGRADES
+from .shooter import Shooter
+from .upgrade_constants import DEFAULT_UPGRADE_LVLS, UPGRADES
 
 
 def clamp(value: float, upper_bound: float, lower_bound: float) -> float:
@@ -56,7 +55,9 @@ class Player(Shooter):
 
         if obj:
             setattr(
-                obj, stat, clamp(getattr(obj, stat) + amount, upper_bound, lower_bound)
+                obj,
+                stat,
+                clamp(getattr(obj, stat) + amount, upper_bound, lower_bound),
             )
             setattr(
                 obj,
@@ -73,7 +74,7 @@ class Player(Shooter):
 
     def load_stats(self) -> None:
         if os.path.exists(self.upgrades_path):
-            with open(self.upgrades_path, "r") as f:
+            with open(self.upgrades_path) as f:
                 try:
                     self.levels = json.load(f)
                 except json.decoder.JSONDecodeError:
@@ -103,4 +104,4 @@ class Player(Shooter):
         upper_bound = UPGRADES[stat]["upper_bound"]
         lower_bound = UPGRADES[stat]["lower_bound"]
 
-        return not (value == upper_bound or value == lower_bound)
+        return value not in (upper_bound, lower_bound)

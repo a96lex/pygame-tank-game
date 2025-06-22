@@ -1,4 +1,4 @@
-class UPGRADEABLE_STATS:
+class UpgradeableStats:
     MAX_SPEED = "max_speed"
     MAX_HEALTH = "max_health"
     SPEED = "speed"
@@ -9,49 +9,49 @@ class UPGRADEABLE_STATS:
 
 
 UPGRADES = {
-    UPGRADEABLE_STATS.MAX_SPEED: {
+    UpgradeableStats.MAX_SPEED: {
         "multiplier": 1.1,
         "amount": 0,
         "upper_bound": 18,
         "lower_bound": 0,
     },
-    UPGRADEABLE_STATS.MAX_HEALTH: {
+    UpgradeableStats.MAX_HEALTH: {
         "multiplier": 1.1,
         "affects": "health",
         "amount": 0,
         "upper_bound": 3000,
         "lower_bound": 0,
     },
-    UPGRADEABLE_STATS.SPEED: {
+    UpgradeableStats.SPEED: {
         "multiplier": 1,
         "amount": 1,
         "upper_bound": 35,
         "lower_bound": 0,
     },
-    UPGRADEABLE_STATS.PRECISION: {
+    UpgradeableStats.PRECISION: {
         "multiplier": 1,
         "amount": 0.5,
         "upper_bound": 100,
         "lower_bound": 0,
     },
-    UPGRADEABLE_STATS.COOLDOWN: {
+    UpgradeableStats.COOLDOWN: {
         "multiplier": 1,
         "amount": -1,
         "upper_bound": 100,
         "lower_bound": 4,
     },
-    UPGRADEABLE_STATS.DAMAGE: {
+    UpgradeableStats.DAMAGE: {
         "multiplier": 1,
         "amount": 10,
         "upper_bound": 120,
         "lower_bound": 0,
     },
-    UPGRADEABLE_STATS.REGEN: {
+    UpgradeableStats.REGEN: {
         "multiplier": 1.1,
         "amount": 0.1,
         "upper_bound": 2,
         "lower_bound": -1,
-    }
+    },
 }
 
 DEFAULT_UPGRADE_LVLS = {
@@ -61,5 +61,5 @@ DEFAULT_UPGRADE_LVLS = {
     "precision": 0,
     "cooldown": 0,
     "damage": 0,
-    "regen": 0
+    "regen": 0,
 }

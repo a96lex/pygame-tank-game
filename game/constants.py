@@ -8,3 +8,5 @@ class Colors:
 
 
 SpriteWidth = 2
+
+REST_BETWEEN_LEVELS = 50
